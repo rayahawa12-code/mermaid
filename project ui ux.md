@@ -1,4 +1,39 @@
----
+graph TD
+    %% Styling
+    classDef page fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef decision fill:#fff9c4,stroke:#fbc02d,stroke-width:2px;
+    classDef process fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef startend fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px;
+
+    %% Nodes
+    Start((Start)):::startend --> Landing[Landing Page / Beranda]:::page
+    
+    %% Flow di Landing Page
+    Landing --> |Klik Tombol 'Masuk'| Auth[Halaman Auth / Login]:::page
+    Landing --> |Klik Menu 'Tentang'| About[Halaman About]:::page
+    
+    %% Flow Halaman About
+    About --> |Klik 'Home'| Landing
+    
+    %% Flow Auth
+    Auth --> |Input Email & Password| CheckValid{Data Valid?}:::decision
+    CheckValid --> |Tidak| AuthError[Tampilkan Error]:::process --> Auth
+    CheckValid --> |Ya| Dashboard[Dashboard / Menu Materi]:::page
+
+    %% Flow Dashboard
+    Dashboard --> |Klik 'Logout'| Landing
+    Dashboard --> |Klik Menu 'Tentang'| About
+    Dashboard --> |Klik Materi Terkunci| ShowToast1[Notifikasi: 'Terkunci!']:::process --> Dashboard
+    Dashboard --> |Klik Materi Terbuka| Lesson[Halaman Belajar / Lesson]:::page
+
+    %% Flow Lesson (Materi & Tool)
+    Lesson --> |Klik 'Kembali ke Dashboard'| Dashboard
+    Lesson --> |Baca Teks Materi| ReadDone[Materi Dibaca]:::process
+    Lesson --> |Interaksi Tool Grafik| GraphDraw[Grafik Berubah]:::process --> Lesson
+    ReadDone --> |Klik 'Selesai / Selanjutnya'| UpdateProg[Update Progres User]:::process --> Dashboard
+
+    %% Styling Links
+    linkStyle default stroke:#333,stroke-width:2px;---
 title: Flowcharts Syntax
 ---
 
